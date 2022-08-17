@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <!-- end header section -->
+  </div>
+
+  <!-- food section -->
+
+  <section class="food_section layout_padding">
+    <div class="container">
+      <div class="heading_container heading_center">
+        <h2>
+          Our Menu
+        </h2>
+      </div>
+      <ul class="filters_menu">
+        <li class="active" data-filter="*">All</li>
+      </ul>
+      <!-- 1 - ustun -->
+      <div class="filters-content">
+        <div class="row grid"> 
+          {% for products in page %}
+          <div class="col-sm-6 col-lg-4 all pizza">
+         
+            <div class="box">
+              <div>
+                <div class="img-box">
+                  {% if products.product_image %}
+                  <img src="{{ products.product_image.url }}" alt="">
+                  {% endif %}
+                  
+                </div>
+                <div class="detail-box">
+                  <h5>
+                    {{ products.product_name }}
+                  </h5>
+                  <p id="soz">
+                    {{ products.product_compound }}
+                  </p>
+                    <div class="">
+                      <hr>
+                      {% if user.is_authenticated %}
+                      <!-- bu qismi js kodlaari ucun mahsulot idisini olishimiz uchun -->
+                      <button data-product='{{ products.id }}' data-action='add' class="btn btn-outline-secondary add-btn update-cart" id="button Add to Cartadd" style="margin-top: -1px;">Add to Cart</button>
+                      <a class="btn btn-outline-success" data-toggle="modal" data-target="#exampleModal-{{ forloop.counter }}">View</a>
+                      <h4 style="display: inline-block; float: right;">
+                        <strong>
+                          ${{ products.product_price }}
+                        </strong>
+                      </h4>
+                      {% else %}
+                      <a href="{% url 'login' %}">
+                        <button id="buttonadd" style="margin-bottom: 14px;" class="btn btn-outline-secondary add-btn update-cart">Add to Cart</button>
+                      </a>
+                      <a class="btn btn-outline-success" data-toggle="modal" data-target="exampleModal-{{ forloop.counter }}">View</a>
+                        <h4 style="display: inline-block; float: right;">                        
+                          <strong>
+                            ${{ products.product_price }}
+                          </strong>
+                        </h4>
+                      {% endif %}
+                    </div>
+                </div>
+              </div>   
+            </div>    
+          </div>
+          {% endfor %}
+        </div>
+
+      <!-- Menyular tugashi -->
+  <br>
+      <div class="col-md-6">
+        <div class="col-12 my-5">
+          <nav aria-label = "Page Navigation">
+            {% if page.has_previous %}
+            <a href="{% url 'menu' %}?page={{page.previous_page_number}}"><button type="button">Oldingi sahifa</button></a>
+             {% endif %}
+             {% if page.has_next %}
+            <a href="{% url 'menu' %}?page={{page.next_page_number}}"><button type="button">Keyingi sahifa</button></a>
+             {% endif %}
+             <style type="text/css">
+               button{
+                      margin-top:  15px;
+                      border: none;
+                      text-transform: uppercase;
+                      display: inline-block;
+                      padding: 10px 55px;
+                      background-color: #ffbe33;
+                      color: #ffffff;
+                      border-radius: 45px;
+                      -webkit- transition: all 0.3s;
+                      transition: all 0.3s;
+                      border: none;
+               }
+             </style>
+          </nav> 
+<!-- Mahsulotlarni qalqib chiqadigan card hosil qilish -->
+<style>
+  .modal-header {
+    flex-direction: column;
+    position: relative;
+    align-items: center;
+  }
+  .modal-dialog {
+    max-width: 250px;
+  }
+  .modal-content {
+    width: 139%;
+    
+  }
+  .close {
+    position: absolute;
+    top: ;
+    right: 16px;
+  }
+</style>
+
+
+{% for products in page %}
+<div class="modal fade" id="exampleModal-{{ forloop.counter }}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel-{{ forloop.counter }}
+" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <img src="{{ products.product_image.url }}" alt="" width="150">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <h3>{{ products.product_name }}</h3>
+        <p>{{ products.product_compound }}</p>
+        <div>
+          <span class="price">${{ products.product_price }}</span>
+          <div>
+            <i></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %}
+<!-- Tugash qismi --> 
+        </div>
+      </div>
+      
+    </div>
+    </div>
+  </section>
+
+  <!-- end food section -->
+
+  <!-- footer section -->
+  {% endblock content %}
